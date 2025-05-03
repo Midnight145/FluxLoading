@@ -69,7 +69,7 @@ public final class WorldLoadingScreenOverhaul {
     public static boolean freezePlayer = false;
 
     public static final String LAST_SCREENSHOT_NAME = "last_screenshot";
-    public static final String THUMBNAIL_NAME = "thumbnail";
+    public static final String THUMBNAIL_NAME = "icon";
 
     // <editor-fold desc="getters & setters">
     public static void prepareScreenShot() {
