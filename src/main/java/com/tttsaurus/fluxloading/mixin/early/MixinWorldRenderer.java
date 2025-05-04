@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.tttsaurus.fluxloading.core.WorldLoadingScreenOverhaul;
 
+@SuppressWarnings("unused")
 @Mixin(WorldRenderer.class)
 public class MixinWorldRenderer {
     // This will get loaded and then later overwritten by Sodium if it is present, so we don't need to worry about

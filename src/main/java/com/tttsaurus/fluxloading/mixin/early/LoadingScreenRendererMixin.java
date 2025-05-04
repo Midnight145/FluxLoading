@@ -11,6 +11,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.tttsaurus.fluxloading.util.MixinHelpers;
 
+@SuppressWarnings("unused")
 @Mixin(LoadingScreenRenderer.class)
 public class LoadingScreenRendererMixin {
 

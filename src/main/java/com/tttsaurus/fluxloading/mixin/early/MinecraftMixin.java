@@ -15,6 +15,7 @@ import com.tttsaurus.fluxloading.FluxLoading;
 import com.tttsaurus.fluxloading.core.WorldLoadingScreenOverhaul;
 import com.tttsaurus.fluxloading.render.GlResourceManager;
 
+@SuppressWarnings("unused")
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
@@ -25,7 +26,6 @@ public class MinecraftMixin {
         FluxLoading.logger.info("OpenGL resources disposed");
     }
 
-    @SuppressWarnings("unused")
     @Inject(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
     public void loadWorld(WorldClient worldClientIn, String loadingMessage, CallbackInfo ci) {
         WorldClient world = Minecraft.getMinecraft().theWorld;
@@ -40,7 +40,6 @@ public class MinecraftMixin {
         }
     }
 
-    @SuppressWarnings("unused")
     @WrapOperation(
         method = "displayInGameMenu",
         at = @At(
