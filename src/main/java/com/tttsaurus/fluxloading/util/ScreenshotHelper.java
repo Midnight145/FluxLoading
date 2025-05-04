@@ -87,7 +87,7 @@ public class ScreenshotHelper {
 
     public static BufferedImage saveScreenshotArbitrarySize(Minecraft mc, int width, int height) {
         suppressHandRendering = true;
-        System.out.println(
+        FluxLoading.logger.debug(
             "Taking " + width + "x" + height + " screenshot (" + mc.displayWidth + "x" + mc.displayHeight + ")");
         int originalWidth = mc.displayWidth;
         int originalHeight = mc.displayHeight;
