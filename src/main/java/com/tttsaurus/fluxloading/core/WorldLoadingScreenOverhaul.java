@@ -51,6 +51,7 @@ public final class WorldLoadingScreenOverhaul {
     private static boolean chunkBuildingTitle = false;
     private static Texture2D texture = null;
     private static BufferedImage screenShot = null;
+    private static BufferedImage thumbnail = null;
 
     // waiting chunk build
     private static boolean countingChunkLoaded = false;
@@ -159,7 +160,6 @@ public final class WorldLoadingScreenOverhaul {
 
     public static void startFadeOutTimer() {
         freezePlayer = true;
-        Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
         fadeOutStopWatch = new StopWatch();
         fadeOutStopWatch.start();
         smoothDamp = new SmoothDamp(0, 1, (float) fadeOutDuration);
@@ -172,11 +172,14 @@ public final class WorldLoadingScreenOverhaul {
             fadeOutStopWatch = null;
         }
         freezePlayer = false;
-        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
     }
 
     public static BufferedImage getScreenShot() {
         return screenShot;
+    }
+
+    public static BufferedImage getThumbnail() {
+        return thumbnail;
     }
     // </editor-fold>
 
@@ -324,13 +327,11 @@ public final class WorldLoadingScreenOverhaul {
             screenShotToggle = false;
             Minecraft minecraft = Minecraft.getMinecraft();
             screenShot = ScreenshotHelper
-                .saveScreenshotArbitrarySize(minecraft, minecraft.displayWidth, minecraft.displayHeight);
-
-            BufferedImage thumbnail = ScreenshotHelper.saveScreenshotArbitrarySize(
-                minecraft,
+                .saveScreenshot(minecraft.displayWidth, minecraft.displayHeight, minecraft.getFramebuffer());
+            thumbnail = ScreenshotHelper.scaleAndCropToResolution(
+                screenShot,
                 FluxLoadingConfig.THUMBNAIL_SIZE,
                 FluxLoadingConfig.THUMBNAIL_SIZE);
-            trySaveToLocal(thumbnail, THUMBNAIL_NAME);
         }
     }
 

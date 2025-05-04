@@ -1,9 +1,6 @@
 package com.tttsaurus.fluxloading.event;
 
-import net.minecraftforge.client.event.RenderHandEvent;
-
 import com.tttsaurus.fluxloading.FluxLoading;
-import com.tttsaurus.fluxloading.util.ScreenshotHelper;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -24,14 +21,5 @@ public class PlayerEventHandler {
     public void onPlayerLeaveFMLEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent e) {
         FluxLoading.screenshotCache.clear();
         FluxLoading.logger.debug("Cleared screenshot cache");
-    }
-
-    /* We need this because we create a new fbo which would have the hand */
-    @SuppressWarnings("unused")
-    @SubscribeEvent
-    public void onRenderHand(RenderHandEvent event) {
-        if (ScreenshotHelper.suppressHandRendering) {
-            event.setCanceled(true);
-        }
     }
 }

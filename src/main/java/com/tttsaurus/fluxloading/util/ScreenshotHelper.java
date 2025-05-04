@@ -24,9 +24,6 @@ import com.tttsaurus.fluxloading.FluxLoading;
 
 @SuppressWarnings("DuplicatedCode")
 public class ScreenshotHelper {
-
-    public static boolean suppressHandRendering = false;
-
     // Code adapted from Minecraft's ScreenshotHelper class
     // Copyright Mojang Studios, 2010-2025.
 
@@ -83,42 +80,6 @@ public class ScreenshotHelper {
             bufferedimage.setRGB(0, 0, p_148259_2_, p_148259_3_, pixelValues, 0, p_148259_2_);
         }
         return bufferedimage;
-    }
-
-    public static BufferedImage saveScreenshotArbitrarySize(Minecraft mc, int width, int height) {
-        suppressHandRendering = true;
-        FluxLoading.logger
-            .debug("Taking " + width + "x" + height + " screenshot (" + mc.displayWidth + "x" + mc.displayHeight + ")");
-        int originalWidth = mc.displayWidth;
-        int originalHeight = mc.displayHeight;
-
-        Framebuffer fbo = new Framebuffer(width, height, true);
-        fbo.bindFramebuffer(false);
-
-        mc.displayWidth = width;
-        mc.displayHeight = height;
-
-        mc.getFramebuffer()
-            .unbindFramebuffer();
-        mc.resize(width, height);
-        mc.entityRenderer.updateCameraAndRender(0);
-
-        fbo.bindFramebuffer(true);
-        mc.entityRenderer.updateCameraAndRender(0);
-
-        BufferedImage screenshot = ScreenshotHelper.saveScreenshot(width, height, fbo);
-
-        fbo.unbindFramebuffer();
-        fbo.deleteFramebuffer();
-
-        mc.displayWidth = originalWidth;
-        mc.displayHeight = originalHeight;
-        mc.resize(originalWidth, originalHeight);
-        mc.getFramebuffer()
-            .bindFramebuffer(false);
-
-        suppressHandRendering = false;
-        return screenshot;
     }
 
     public static BufferedImage scaleAndCropToResolution(BufferedImage source, int targetWidth, int targetHeight) {

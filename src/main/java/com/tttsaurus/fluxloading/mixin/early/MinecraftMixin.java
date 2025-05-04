@@ -37,6 +37,8 @@ public class MinecraftMixin {
             WorldLoadingScreenOverhaul.trySaveToLocal(
                 WorldLoadingScreenOverhaul.getScreenShot(),
                 WorldLoadingScreenOverhaul.LAST_SCREENSHOT_NAME);
+            WorldLoadingScreenOverhaul
+                .trySaveToLocal(WorldLoadingScreenOverhaul.getThumbnail(), WorldLoadingScreenOverhaul.THUMBNAIL_NAME);
         }
     }
 
