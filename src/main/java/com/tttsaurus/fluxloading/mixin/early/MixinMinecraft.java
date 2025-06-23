@@ -1,14 +1,13 @@
 package com.tttsaurus.fluxloading.mixin.early;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.message.Message;
-import org.apache.logging.log4j.message.MessageFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,13 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.tttsaurus.fluxloading.FluxLoadingConfig;
 import com.tttsaurus.fluxloading.FluxLoading;
 import com.tttsaurus.fluxloading.FluxLoadingConfig;
 import com.tttsaurus.fluxloading.core.WorldLoadingScreenOverhaul;
 import com.tttsaurus.fluxloading.render.GlResourceManager;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 @SuppressWarnings("unused")
 @Mixin(Minecraft.class)
@@ -32,7 +29,8 @@ public class MixinMinecraft {
     public void shutdown(CallbackInfo ci) {
         Logger logger = null;
         for (Field f : Minecraft.class.getDeclaredFields()) {
-            if (f.getType().equals(Logger.class) && Modifier.isStatic(f.getModifiers())) {
+            if (f.getType()
+                .equals(Logger.class) && Modifier.isStatic(f.getModifiers())) {
                 f.setAccessible(true);
                 try {
                     logger = (Logger) f.get(null);

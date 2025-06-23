@@ -10,12 +10,13 @@
   "client": [
     "GuiDownloadTerrainMixin",
     "GuiScreenWorkingMixin",
-    "LoadingScreenRendererMixin",
-    "MixinMinecraft",
-    "MixinWorldRenderer",
     "GuiSelectWorldAccessor",
     "GuiSelectWorldMixin",
-    "MixinMouseHelper"
+    "LoadingScreenRendererMixin",
+    "MixinGuiInventory",
+    "MixinMinecraft",
+    "MixinMouseHelper",
+    "MixinWorldRenderer"
   ],
   "server": []
 }

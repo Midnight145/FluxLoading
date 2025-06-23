@@ -18,6 +18,8 @@ public class FluxLoadingConfig {
     public static boolean ENABLE_THUMBNAIL;
     public static int THUMBNAIL_SIZE;
 
+    public static boolean SS_ON_INV;
+
     public static Configuration CONFIG;
 
     public static void loadConfig() {
@@ -73,6 +75,13 @@ public class FluxLoadingConfig {
                 32,
                 4096,
                 "Size of the world selection GUI thumbnail");
+
+            SS_ON_INV = CONFIG.getBoolean(
+                "Screenshot on Inventory",
+                "general",
+                false,
+                "Take a screenshot when inventory is opened, instead of just on pause");
+
         } catch (Exception ignored) {} finally {
             if (CONFIG.hasChanged()) CONFIG.save();
         }

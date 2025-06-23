@@ -22,9 +22,9 @@ public final class GlResourceManager {
         for (IGlDisposable disposable : disposables) {
             if (logger != null) {
                 logger.info(
-                        "Disposing %s",
-                        disposable.getClass()
-                                .getSimpleName());
+                    "Disposing %s",
+                    disposable.getClass()
+                        .getSimpleName());
             }
             disposable.dispose();
             checkGLError(logger);
