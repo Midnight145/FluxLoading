@@ -4,6 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.message.Message;
+import org.apache.logging.log4j.message.MessageFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,15 +21,33 @@ import com.tttsaurus.fluxloading.FluxLoadingConfig;
 import com.tttsaurus.fluxloading.core.WorldLoadingScreenOverhaul;
 import com.tttsaurus.fluxloading.render.GlResourceManager;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 @SuppressWarnings("unused")
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
 
     @Inject(method = "shutdown", at = @At("HEAD"))
     public void shutdown(CallbackInfo ci) {
-        FluxLoading.logger.info("Starts disposing OpenGL resources");
-        GlResourceManager.disposeAll(FluxLoading.logger);
-        FluxLoading.logger.info("OpenGL resources disposed");
+        Logger logger = null;
+        for (Field f : Minecraft.class.getDeclaredFields()) {
+            if (f.getType().equals(Logger.class) && Modifier.isStatic(f.getModifiers())) {
+                f.setAccessible(true);
+                try {
+                    logger = (Logger) f.get(null);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            }
+        }
+        GlResourceManager.disposeAll(logger);
+        if (logger == null) {
+            return;
+        }
+        logger.info("FluxLoading: Start disposing OpenGL resources");
+        logger.info("FluxLoading: OpenGL resources disposed");
     }
 
     @Inject(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V", at = @At("HEAD"))
