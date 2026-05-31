@@ -7,8 +7,6 @@ import java.util.Set;
 import com.gtnewhorizon.gtnhmixins.ILateMixinLoader;
 import com.gtnewhorizon.gtnhmixins.LateMixin;
 
-import cpw.mods.fml.common.Loader;
-
 @LateMixin
 public class FluxLoadingLateMixinLoader implements ILateMixinLoader {
 
@@ -20,13 +18,16 @@ public class FluxLoadingLateMixinLoader implements ILateMixinLoader {
     @Override
     public List<String> getMixins(Set<String> loadedMods) {
         List<String> mixins = new ArrayList<>();
-        if (Loader.isModLoaded("embeddium")) {
+        if (loadedMods.contains("angelica")) {
+            mixins.add("MixinCeleritasWorldRenderer");
+        }
+        if (loadedMods.contains("embeddium")) {
             mixins.add("MixinSodiumWorldRenderer");
         }
-        if (Loader.isModLoaded("loading_screen_messages")) {
+        if (loadedMods.contains("loading_screen_messages")) {
             mixins.add("MixinLoadingScreen_LoadingScreenMessages");
         }
-        if (Loader.isModLoaded("aether_legacy")) {
+        if (loadedMods.contains("aether_legacy")) {
             mixins.add("MixinAetherLoadingScreen");
         }
         return mixins;
