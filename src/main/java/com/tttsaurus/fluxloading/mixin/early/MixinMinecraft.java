@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.tttsaurus.fluxloading.FluxLoadingConfig;
+import com.tttsaurus.fluxloading.FluxLoading;
+import com.tttsaurus.fluxloading.FluxLoadingConfig;
 import com.tttsaurus.fluxloading.core.WorldLoadingScreenOverhaul;
 import com.tttsaurus.fluxloading.render.GlResourceManager;
 
