@@ -20,8 +20,8 @@ public class FluxLoadingLateMixinLoader implements ILateMixinLoader {
     @Override
     public List<String> getMixins(Set<String> loadedMods) {
         List<String> mixins = new ArrayList<>();
-        if (Loader.isModLoaded("embeddium")) {
-            mixins.add("MixinSodiumWorldRenderer");
+        if (Loader.isModLoaded("angelica")) {
+            mixins.add("MixinCeleritasWorldRenderer");
         }
         if (Loader.isModLoaded("loading_screen_messages")) {
             mixins.add("MixinLoadingScreen_LoadingScreenMessages");
