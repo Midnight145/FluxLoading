@@ -21,9 +21,6 @@ public class FluxLoadingLateMixinLoader implements ILateMixinLoader {
         if (loadedMods.contains("angelica")) {
             mixins.add("MixinCeleritasWorldRenderer");
         }
-        if (loadedMods.contains("embeddium")) {
-            mixins.add("MixinSodiumWorldRenderer");
-        }
         if (loadedMods.contains("loading_screen_messages")) {
             mixins.add("MixinLoadingScreen_LoadingScreenMessages");
         }
