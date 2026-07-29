@@ -23,7 +23,9 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.apache.commons.lang3.time.StopWatch;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 import com.tttsaurus.fluxloading.FluxLoading;
 import com.tttsaurus.fluxloading.FluxLoadingConfig;
@@ -279,9 +281,7 @@ public final class WorldLoadingScreenOverhaul {
         GlStateManager.setActiveTexture(texUnit);
 
         if (depthTest) GlStateManager.enableDepth();
-        else GlStateManager.disableDepth();
-        if (blend) GlStateManager.enableBlend();
-        else GlStateManager.disableBlend();
+        if (!blend) GlStateManager.disableBlend();
     }
 
     @SuppressWarnings("unused")
@@ -336,16 +336,64 @@ public final class WorldLoadingScreenOverhaul {
     }
 
     private static void triggerShader() {
+        // Preserve current ARRAY_BUFFER and VAO bindings
+        CommonBuffers.intBuffer.rewind();
+        GL11.glGetInteger(GL15.GL_ARRAY_BUFFER_BINDING, CommonBuffers.intBuffer);
+        int prevArrayBuffer = CommonBuffers.intBuffer.get(0);
+
+        int prevVao = 0;
+        boolean haveVAO = true;
+        try {
+            CommonBuffers.intBuffer.rewind();
+            GL11.glGetInteger(GL30.GL_VERTEX_ARRAY_BINDING, CommonBuffers.intBuffer);
+            prevVao = CommonBuffers.intBuffer.get(0);
+        } catch (Throwable t) {
+            // GL30 might not be available; ignore
+            haveVAO = false;
+        }
+
+        // Create temporary VBO and upload vertex data
+        int vbo = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+        vertexBuffer.rewind();
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBuffer, GL15.GL_STATIC_DRAW);
+
+        int tempVao = 0;
+        if (haveVAO) {
+            // Create and bind a temporary VAO so we don't modify the application's VAO state
+            tempVao = GL30.glGenVertexArrays();
+            GL30.glBindVertexArray(tempVao);
+        }
+
+        // Preserve vertex attrib enabled state
+        CommonBuffers.intBuffer.rewind();
         GL20.glGetVertexAttrib(0, GL20.GL_VERTEX_ATTRIB_ARRAY_ENABLED, CommonBuffers.intBuffer);
-        boolean enabled = CommonBuffers.intBuffer.get(0) == GL11.GL_TRUE;
+        boolean wasEnabled = CommonBuffers.intBuffer.get(0) == GL11.GL_TRUE;
 
-        GL20.glEnableVertexAttribArray(0);
+        if (!wasEnabled) GL20.glEnableVertexAttribArray(0);
 
-        GL20.glVertexAttribPointer(0, 3, false, 0, vertexBuffer);
+        // Point attribute 0 at our temporary VBO (offset 0)
+        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0L);
+
+        // Draw
         GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, 3);
 
-        if (enabled) GL20.glEnableVertexAttribArray(0);
-        else GL20.glDisableVertexAttribArray(0);
+        // Restore attribute enable state
+        if (!wasEnabled) GL20.glDisableVertexAttribArray(0);
+
+        // Unbind and delete temporary VAO if created
+        if (haveVAO) {
+            try {
+                GL30.glBindVertexArray(prevVao);
+                GL30.glDeleteVertexArrays(tempVao);
+            } catch (Throwable t) {
+                // ignore
+            }
+        }
+
+        // Restore previous ARRAY_BUFFER binding and delete temporary VBO
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, prevArrayBuffer);
+        GL15.glDeleteBuffers(vbo);
     }
 
     private static void initShader() {
