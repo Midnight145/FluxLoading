@@ -7,12 +7,15 @@ import net.minecraft.util.ResourceLocation;
 
 import org.apache.logging.log4j.Logger;
 
+import com.tttsaurus.fluxloading.event.RenderChunkEventHandler;
 import com.tttsaurus.fluxloading.proxy.CommonProxy;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(
@@ -42,5 +45,12 @@ public class FluxLoading {
     public void init(FMLInitializationEvent event) {
         proxy.init(event, logger);
         logger.info("Flux Loading initialized.");
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        if (Loader.isModLoaded("angelica")) {
+            RenderChunkEventHandler.register();
+        }
     }
 }
