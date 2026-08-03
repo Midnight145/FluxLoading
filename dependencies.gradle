@@ -36,10 +36,11 @@
 dependencies {
     runtimeOnly("com.github.GTNewHorizons:NotEnoughItems:2.8.100-GTNH:dev")
     runtimeOnly("com.github.GTNewHorizons:waila:1.19.29:dev@jar")
-    compileOnly("com.github.GTNewHorizons:Angelica:2.1.28:dev@jar")
+    compileOnly("com.github.GTNewHorizons:Angelica:2.1.60:dev@jar")
 //    runtimeOnly("com.github.GTNewHorizons:GTNHLib:0.11.3:dev@jar")
     compileOnly(rfg.deobf("curse.maven:loading-screen-messages-1082974:5623828"))
     compileOnly(rfg.deobf("curse.maven:aether-255308:5875775"))
+
 
 
 }
